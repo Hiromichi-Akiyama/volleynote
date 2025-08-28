@@ -2,7 +2,6 @@ Rails.application.routes.draw do
   devise_for :users
   root 'home#index'
   
-  # 認証が必要なページ
   authenticate :user do
     resources :players do
       member do
@@ -13,8 +12,15 @@ Rails.application.routes.draw do
     resources :matches do
       member do
         post 'start'
-        patch 'end'
+        get 'end_match'
         get 'result'
+        get 'print_result'
+        post 'add_player'
+        patch 'move_to_bench'
+        patch 'move_to_court'  # 新しいルート
+        delete 'remove_player'
+        patch 'substitute_player'
+        patch 'record_stat'
       end
     end
     

@@ -1,0 +1,129 @@
+<div class="app-body">
+    <%= render 'shared/app_header' %>
+    
+    <div class="container">
+        <div style="background: #28a745; color: white; padding: 15px; border-radius: 8px; margin-bottom: 20px; text-align: center;">
+            <h1 style="margin: 0; color: white;">🏐 試合結果</h1>
+            <div style="margin-top: 10px; font-size: 16px;">
+                出場選手: <%= @match_players_data.length %>名 
+                (先発<%= @match.match_players.starting.count %>名 + ベンチ<%= @match.match_players.bench.count %>名)
+            </div>
+        </div>
+        
+        <!-- 出場選手の成績 -->
+        <div style="background: white; border-radius: 8px; padding: 15px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+            <h3>📊 出場選手成績</h3>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>背番号</th>
+                            <th>名前</th>
+                            <th>ポジション</th>
+                            <th>スパイク</th>
+                            <th>サーブレシーブ</th>
+                            <th>サーブ</th>
+                            <th>総合評価</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% @match_players_data.each do |data| %>
+                            <% player = data[:player] %>
+                            <% stats = data[:stats] %>
+                            <% rates = data[:rates] %>
+                            <tr>
+                                <td style="text-align: center; font-weight: bold;"><%= player.number %></td>
+                                <td style="font-weight: bold;"><%= player.name %></td>
+                                <td style="font-size: 12px;"><%= player.position %></td>
+                                <td>
+                                    <div style="font-size: 11px;">
+                                        <div>本数: <%= stats[:spike_attempts] %></div>
+                                        <div>決定: <%= stats[:spike_kills] %></div>
+                                        <div style="color: #dc3545; font-weight: bold;">率: <%= rates[:spike_rate] %>%</div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div style="font-size: 11px;">
+                                        <div>本数: <%= stats[:recv_attempts] %></div>
+                                        <div>成功: <%= stats[:recv_successes] %></div>
+                                        <div style="color: #007bff; font-weight: bold;">率: <%= rates[:recv_rate] %>%</div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div style="font-size: 11px;">
+                                        <div>本数: <%= stats[:serve_attempts] %></div>
+                                        <div>効果: <%= stats[:serve_effects] %></div>
+                                        <div>決定: <%= stats[:serve_points] %></div>
+                                        <div style="color: #28a745; font-weight: bold;">率: <%= rates[:serve_effect_rate] %>%</div>
+                                    </div>
+                                </td>
+                                <td style="text-align: center; font-weight: bold; color: #6f42c1;">
+                                    <%= data[:total_score].round(1) %>
+                                </td>
+                            </tr>
+                        <% end %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <!-- チーム統計 -->
+        <div style="background: #f8f9fa; border-radius: 8px; padding: 15px; margin-bottom: 20px;">
+            <h3>📈 チーム統計</h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+                <div style="background: white; padding: 12px; border-radius: 6px; text-align: center;">
+                    <div style="font-size: 24px; font-weight: bold; color: #dc3545;"><%= @team_stats[:spike_rate] %>%</div>
+                    <div style="font-size: 14px; color: #6c757d;">チームスパイク決定率</div>
+                </div>
+                <div style="background: white; padding: 12px; border-radius: 6px; text-align: center;">
+                    <div style="font-size: 24px; font-weight: bold; color: #007bff;"><%= @team_stats[:recv_rate] %>%</div>
+                    <div style="font-size: 14px; color: #6c757d;">チームSR成功率</div>
+                </div>
+                <div style="background: white; padding: 12px; border-radius: 6px; text-align: center;">
+                    <div style="font-size: 24px; font-weight: bold; color: #28a745;"><%= @team_stats[:serve_effect_rate] %>%</div>
+                    <div style="font-size: 14px; color: #6c757d;">チームサーブ効果率</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- MVP選出 -->
+        <% if @mvp %>
+            <div style="background: linear-gradient(135deg, #ffd700, #ffed4e); border-radius: 8px; padding: 15px; margin-bottom: 20px;">
+                <h3 style="text-align: center; margin-bottom: 15px;">🏆 MVP</h3>
+                <div style="text-align: center;">
+                    <div style="font-size: 24px; font-weight: bold; margin-bottom: 10px;">
+                        #<%= @mvp[:player].number %> <%= @mvp[:player].name %>
+                    </div>
+                    <div style="font-size: 16px; color: #6c757d; margin-bottom: 10px;">
+                        <%= @mvp[:player].position %>
+                    </div>
+                    <div style="font-size: 18px; font-weight: bold;">
+                        総合評価: <%= @mvp[:score].round(1) %>点
+                    </div>
+                </div>
+            </div>
+        <% end %>
+        
+        <!-- ポジション別最優秀選手 -->
+        <% if @position_awards.any? %>
+            <div style="background: white; border-radius: 8px; padding: 15px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                <h3>🥇 ポジション別最優秀選手</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px;">
+                    <% @position_awards.each do |position, award| %>
+                        <div style="background: white; padding: 15px; border-radius: 6px; text-align: center; border: 2px solid #ffd700;">
+                            <div style="font-weight: bold; color: #6c757d; margin-bottom: 5px;"><%= position %></div>
+                            <div style="font-size: 18px; font-weight: bold;">#<%= award[:player].number %> <%= award[:player].name %></div>
+                            <div style="font-size: 14px; color: #6c757d;">評価: <%= award[:score].round(1) %>点</div>
+                        </div>
+                    <% end %>
+                </div>
+            </div>
+        <% end %>
+        
+        <div style="text-align: center; margin-top: 20px;">
+            <%= link_to "選手一覧に戻る", players_path, class: "btn" %>
+            <%= link_to "新しい試合", new_match_path, class: "btn btn-secondary" %>
+            <%= link_to "印刷用表示", print_result_match_path(@match), class: "btn", target: "_blank" %>
+        </div>
+    </div>
+</div>

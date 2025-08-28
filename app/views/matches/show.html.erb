@@ -1,2 +1,423 @@
-<h1>Matches#show</h1>
-<p>Find me in app/views/matches/show.html.erb</p>
+<div class="app-body">
+    <%= render 'shared/app_header' %>
+    
+    <div class="container" data-controller="match">
+        <div id="notice" class="notice" style="display: none;"></div>
+        
+        <div class="match-header">
+            <div class="match-status">🏐 試合モード</div>
+            <div>
+                <% if @match.active? %>
+                    <%= link_to "試合終了", end_match_match_path(@match),
+                        data: { turbo_confirm: "本当に試合を終了しますか？" }, class: "btn" %>
+                <% end %>
+                <%= link_to "戻る", players_path, class: "btn btn-secondary" %>
+            </div>
+        </div>
+        
+        <% if @match.preparing? %>
+            <!-- 選手選択段階 -->
+            <div data-match-target="playerSelectionPhase">
+                <div class="player-selection">
+                    <h3>🏐 スターティングメンバーを選択してください（最大6名）</h3>
+                    <div>選択済み: <span data-match-target="startingCount">0</span>/6名</div>
+                    <div class="player-grid" data-match-target="startingGrid">
+                        <% @players.each do |player| %>
+                            <div class="player-card" 
+                                 data-player-id="<%= player.id %>" 
+                                 data-action="click->match#toggleStartingPlayer">
+                                <div style="font-weight: bold; color: #007bff; font-size: 18px;">#<%= player.number %></div>
+                                <div style="font-weight: bold; margin: 5px 0;"><%= player.name %></div>
+                                <div style="font-size: 12px; color: #6c757d;"><%= player.position %></div>
+                            </div>
+                        <% end %>
+                    </div>
+                </div>
+                
+                <div class="player-selection" style="background: #fff3cd; border-color: #ffeaa7;">
+                    <h3>🪑 ベンチメンバーを選択してください（任意）</h3>
+                    <div>選択済み: <span data-match-target="benchCount">0</span>名</div>
+                    <div class="player-grid" data-match-target="benchGrid">
+                        <% @players.each do |player| %>
+                            <div class="player-card" 
+                                 data-player-id="<%= player.id %>" 
+                                 data-action="click->match#toggleBenchPlayer">
+                                <div style="font-weight: bold; color: #6c757d; font-size: 18px;">#<%= player.number %></div>
+                                <div style="font-weight: bold; margin: 5px 0;"><%= player.name %></div>
+                                <div style="font-size: 12px; color: #6c757d;"><%= player.position %></div>
+                            </div>
+                        <% end %>
+                    </div>
+                </div>
+                
+                <div style="text-align: center; margin-top: 20px;">
+                    <button class="btn" 
+                            data-match-target="startMatchBtn" 
+                            data-action="click->match#startMatch"
+                            data-match-id="<%= @match.id %>"
+                            disabled>試合開始</button>
+                </div>
+            </div>
+        <% else %>
+            <!-- 試合進行段階 -->
+            <div data-match-target="matchProgressPhase">
+                <!-- コート上の選手 -->
+                <div class="court-players">
+                    <h3>🏐 コート上の選手</h3>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                        <span>現在: <span data-match-target="courtCount"><%= @match.match_players.on_court.count %></span>/6名</span>
+                        <% if @available_players.any? %>
+                            <select onchange="if(this.value) { addPlayerToCourt(this.value, <%= @match.id %>) }" class="btn btn-sm">
+                                <option value="">選手追加</option>
+                                <% @available_players.each do |player| %>
+                                    <option value="<%= player.id %>">#<%= player.number %> <%= player.name %></option>
+                                <% end %>
+                            </select>
+                        <% end %>
+                    </div>
+                    <div class="court-grid">
+                        <% @match.match_players.on_court.includes(:player).each do |match_player| %>
+                            <% player = match_player.player %>
+                            <div class="court-player">
+                                <div style="font-weight: bold; color: #007bff; font-size: 16px;">#<%= player.number %></div>
+                                <div style="font-weight: bold; font-size: 12px; margin: 3px 0;"><%= player.name %></div>
+                                <div style="font-size: 10px; color: #6c757d;"><%= player.position %></div>
+                                <div style="display: flex; gap: 5px; margin-top: 5px; flex-wrap: wrap;">
+                                    <% bench_players = @match.match_players.on_bench.includes(:player) %>
+                                    <% if bench_players.any? %>
+                                        <select class="substitute-btn" 
+                                                onchange="if(this.value) { substitutePlayer(this.value, <%= player.id %>, <%= @match.id %>) }"
+                                                style="font-size: 10px; padding: 4px; background: #ffc107; border: 1px solid #ffc107; border-radius: 3px; color: #212529;">
+                                            <option value="">交代</option>
+                                            <% bench_players.each do |bench_match_player| %>
+                                                <option value="<%= bench_match_player.player.id %>">
+                                                    #<%= bench_match_player.player.number %> <%= bench_match_player.player.name %>
+                                                </option>
+                                            <% end %>
+                                        </select>
+                                    <% end %>
+                                    <button class="remove-btn" 
+                                            onclick="moveToBench(<%= player.id %>, <%= @match.id %>)"
+                                            style="font-size: 10px; padding: 4px 8px; background: #dc3545; border: 1px solid #dc3545; color: white; border-radius: 3px; cursor: pointer;">ベンチへ</button>
+                                </div>
+                            </div>
+                        <% end %>
+                    </div>
+                </div>
+                
+                <!-- ベンチの選手 -->
+                <div class="bench-players">
+                    <h3>🪑 ベンチ</h3>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                        <span>ベンチ: <span data-match-target="benchPlayersCount"><%= @match.match_players.on_bench.count %></span>名</span>
+                        <% if @available_players.any? %>
+                            <select onchange="if(this.value) { addPlayerToBench(this.value, <%= @match.id %>) }" class="btn btn-sm btn-secondary">
+                                <option value="">ベンチに追加</option>
+                                <% @available_players.each do |player| %>
+                                    <option value="<%= player.id %>">#<%= player.number %> <%= player.name %></option>
+                                <% end %>
+                            </select>
+                        <% end %>
+                    </div>
+                    <div class="court-grid">
+                        <% @match.match_players.on_bench.includes(:player).each do |match_player| %>
+                            <% player = match_player.player %>
+                            <div class="court-player">
+                                <div style="font-weight: bold; color: #6c757d; font-size: 16px;">#<%= player.number %></div>
+                                <div style="font-weight: bold; font-size: 12px; margin: 3px 0;"><%= player.name %></div>
+                                <div style="font-size: 10px; color: #6c757d;"><%= player.position %></div>
+                                <div style="display: flex; gap: 5px; margin-top: 5px; flex-wrap: wrap;">
+                                    <button class="substitute-btn" 
+                                            onclick="moveToCourtFromBench(<%= player.id %>, <%= @match.id %>)"
+                                            style="font-size: 10px; padding: 4px 8px; background: #ffc107; border: 1px solid #ffc107; color: #212529; border-radius: 3px; cursor: pointer;">投入</button>
+                                    <button class="remove-btn" 
+                                            data-action="click->match#removePlayer"
+                                            data-player-id="<%= player.id %>"
+                                            data-match-id="<%= @match.id %>"
+                                            style="font-size: 10px; padding: 4px 8px; background: #dc3545; border: 1px solid #dc3545; color: white; border-radius: 3px; cursor: pointer;">除外</button>
+                                </div>
+                            </div>
+                        <% end %>
+                    </div>
+                </div>
+                
+                <!-- 統計入力テーブル -->
+                <div class="match-table">
+                    <div class="table-container">
+                        <table data-match-target="matchTable">
+                            <thead>
+                                <tr>
+                                    <th>背番号</th>
+                                    <th>名前・ポジション</th>
+                                    <th>スパイク</th>
+                                    <th>サーブレシーブ</th>
+                                    <th>サーブ</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% @match.match_players.on_court.includes(:player).order('players.number').each do |match_player| %>
+                                    <% player = match_player.player %>
+                                    <% stats = @match.match_stats_for_player(player) %>
+                                    <% spike_rate = stats[:spike_attempts] > 0 ? (stats[:spike_kills].to_f / stats[:spike_attempts] * 100).round(1) : 0.0 %>
+                                    <% recv_rate = stats[:recv_attempts] > 0 ? (stats[:recv_successes].to_f / stats[:recv_attempts] * 100).round(1) : 0.0 %>
+                                    <% serve_effect_rate = stats[:serve_attempts] > 0 ? (stats[:serve_effects].to_f / stats[:serve_attempts] * 100).round(1) : 0.0 %>
+                                    <% serve_point_rate = stats[:serve_attempts] > 0 ? (stats[:serve_points].to_f / stats[:serve_attempts] * 100).round(1) : 0.0 %>
+                                    
+                                    <tr data-player-id="<%= player.id %>">
+                                        <td class="player-number"><%= player.number %></td>
+                                        <td class="player-info">
+                                            <div class="player-name"><%= player.name %></div>
+                                            <div style="color: #6c757d; font-size: 11px;"><%= player.position %></div>
+                                        </td>
+                                        <td>
+                                            <div class="stat-block">
+                                                <div class="stat-row">
+                                                    <span class="stat-label">試行: <span class="stat-value" data-stat="spike_attempts"><%= stats[:spike_attempts] %></span></span>
+                                                    <div class="btn-group">
+                                                        <button class="btn btn-sm btn-secondary" 
+                                                                data-action="click->match#recordStat"
+                                                                data-player-id="<%= player.id %>"
+                                                                data-stat-type="spike_attempt"
+                                                                data-delta="-1"
+                                                                data-match-id="<%= @match.id %>">−</button>
+                                                        <button class="btn btn-sm" 
+                                                                data-action="click->match#recordStat"
+                                                                data-player-id="<%= player.id %>"
+                                                                data-stat-type="spike_attempt"
+                                                                data-delta="1"
+                                                                data-match-id="<%= @match.id %>">+</button>
+                                                    </div>
+                                                </div>
+                                                <div class="stat-row">
+                                                    <span class="stat-label">決定: <span class="stat-value" data-stat="spike_kills"><%= stats[:spike_kills] %></span></span>
+                                                    <div class="btn-group">
+                                                        <button class="btn btn-sm btn-secondary" 
+                                                                data-action="click->match#recordStat"
+                                                                data-player-id="<%= player.id %>"
+                                                                data-stat-type="spike_kill"
+                                                                data-delta="-1"
+                                                                data-match-id="<%= @match.id %>">−</button>
+                                                        <button class="btn btn-sm" 
+                                                                data-action="click->match#recordStat"
+                                                                data-player-id="<%= player.id %>"
+                                                                data-stat-type="spike_kill"
+                                                                data-delta="1"
+                                                                data-match-id="<%= @match.id %>">+</button>
+                                                    </div>
+                                                </div>
+                                                <div class="rate-display" data-rate="spike_rate">決定率: <%= spike_rate %>%</div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="stat-block">
+                                                <div class="stat-row">
+                                                    <span class="stat-label">試行: <span class="stat-value" data-stat="recv_attempts"><%= stats[:recv_attempts] %></span></span>
+                                                    <div class="btn-group">
+                                                        <button class="btn btn-sm btn-secondary" 
+                                                                data-action="click->match#recordStat"
+                                                                data-player-id="<%= player.id %>"
+                                                                data-stat-type="recv_attempt"
+                                                                data-delta="-1"
+                                                                data-match-id="<%= @match.id %>">−</button>
+                                                        <button class="btn btn-sm" 
+                                                                data-action="click->match#recordStat"
+                                                                data-player-id="<%= player.id %>"
+                                                                data-stat-type="recv_attempt"
+                                                                data-delta="1"
+                                                                data-match-id="<%= @match.id %>">+</button>
+                                                    </div>
+                                                </div>
+                                                <div class="stat-row">
+                                                    <span class="stat-label">成功: <span class="stat-value" data-stat="recv_successes"><%= stats[:recv_successes] %></span></span>
+                                                    <div class="btn-group">
+                                                        <button class="btn btn-sm btn-secondary" 
+                                                                data-action="click->match#recordStat"
+                                                                data-player-id="<%= player.id %>"
+                                                                data-stat-type="recv_success"
+                                                                data-delta="-1"
+                                                                data-match-id="<%= @match.id %>">−</button>
+                                                        <button class="btn btn-sm" 
+                                                                data-action="click->match#recordStat"
+                                                                data-player-id="<%= player.id %>"
+                                                                data-stat-type="recv_success"
+                                                                data-delta="1"
+                                                                data-match-id="<%= @match.id %>">+</button>
+                                                    </div>
+                                                </div>
+                                                <div class="rate-display" data-rate="recv_rate">成功率: <%= recv_rate %>%</div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="stat-block">
+                                                <div class="stat-row">
+                                                    <span class="stat-label">試行: <span class="stat-value" data-stat="serve_attempts"><%= stats[:serve_attempts] %></span></span>
+                                                    <div class="btn-group">
+                                                        <button class="btn btn-sm btn-secondary" 
+                                                                data-action="click->match#recordStat"
+                                                                data-player-id="<%= player.id %>"
+                                                                data-stat-type="serve_attempt"
+                                                                data-delta="-1"
+                                                                data-match-id="<%= @match.id %>">−</button>
+                                                        <button class="btn btn-sm" 
+                                                                data-action="click->match#recordStat"
+                                                                data-player-id="<%= player.id %>"
+                                                                data-stat-type="serve_attempt"
+                                                                data-delta="1"
+                                                                data-match-id="<%= @match.id %>">+</button>
+                                                    </div>
+                                                </div>
+                                                <div class="stat-row">
+                                                    <span class="stat-label">効果: <span class="stat-value" data-stat="serve_effects"><%= stats[:serve_effects] %></span></span>
+                                                    <div class="btn-group">
+                                                        <button class="btn btn-sm btn-secondary" 
+                                                                data-action="click->match#recordStat"
+                                                                data-player-id="<%= player.id %>"
+                                                                data-stat-type="serve_effect"
+                                                                data-delta="-1"
+                                                                data-match-id="<%= @match.id %>">−</button>
+                                                        <button class="btn btn-sm" 
+                                                                data-action="click->match#recordStat"
+                                                                data-player-id="<%= player.id %>"
+                                                                data-stat-type="serve_effect"
+                                                                data-delta="1"
+                                                                data-match-id="<%= @match.id %>">+</button>
+                                                    </div>
+                                                </div>
+                                                <div class="stat-row">
+                                                    <span class="stat-label">決定: <span class="stat-value" data-stat="serve_points"><%= stats[:serve_points] %></span></span>
+                                                    <div class="btn-group">
+                                                        <button class="btn btn-sm btn-secondary" 
+                                                                data-action="click->match#recordStat"
+                                                                data-player-id="<%= player.id %>"
+                                                                data-stat-type="serve_point"
+                                                                data-delta="-1"
+                                                                data-match-id="<%= @match.id %>">−</button>
+                                                        <button class="btn btn-sm" 
+                                                                data-action="click->match#recordStat"
+                                                                data-player-id="<%= player.id %>"
+                                                                data-stat-type="serve_point"
+                                                                data-delta="1"
+                                                                data-match-id="<%= @match.id %>">+</button>
+                                                    </div>
+                                                </div>
+                                                <div class="rate-display" data-rate="serve_effect_rate">効果率: <%= serve_effect_rate %>%</div>
+                                                <div class="rate-display" data-rate="serve_point_rate">決定率: <%= serve_point_rate %>%</div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                <% end %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        <% end %>
+    </div>
+</div>
+
+<script>
+function addPlayerToCourt(playerId, matchId) {
+    fetch(`/matches/${matchId}/add_player`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        },
+        body: JSON.stringify({
+            player_id: playerId,
+            court_status: 'on_court'
+        })
+    }).then(response => response.json())
+      .then(data => {
+          if (data.success) {
+              location.reload()
+          } else {
+              alert(data.message)
+          }
+      })
+}
+
+function addPlayerToBench(playerId, matchId) {
+    fetch(`/matches/${matchId}/add_player`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        },
+        body: JSON.stringify({
+            player_id: playerId,
+            court_status: 'on_bench'
+        })
+    }).then(response => response.json())
+      .then(data => {
+          if (data.success) {
+              location.reload()
+          } else {
+              alert(data.message)
+          }
+      })
+}
+
+function moveToBench(playerId, matchId) {
+    fetch(`/matches/${matchId}/move_to_bench`, {
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        },
+        body: JSON.stringify({
+            player_id: playerId
+        })
+    }).then(response => response.json())
+      .then(data => {
+          if (data.success) {
+              location.reload()
+          } else {
+              alert(data.message)
+          }
+      })
+}
+
+function moveToCourtFromBench(playerId, matchId) {
+    fetch(`/matches/${matchId}/move_to_court`, {
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        },
+        body: JSON.stringify({
+            player_id: playerId
+        })
+    }).then(response => response.json())
+      .then(data => {
+          if (data.success) {
+              location.reload()
+          } else {
+              alert(data.message)
+          }
+      })
+}
+
+function substitutePlayer(inPlayerId, outPlayerId, matchId) {
+    if (confirm('選手を交代しますか？')) {
+        fetch(`/matches/${matchId}/substitute_player`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            },
+            body: JSON.stringify({
+                in_player_id: inPlayerId,
+                out_player_id: outPlayerId
+            })
+        }).then(response => response.json())
+          .then(data => {
+              if (data.success) {
+                  location.reload()
+              } else {
+                  alert(data.message)
+              }
+          })
+    }
+}
+</script>

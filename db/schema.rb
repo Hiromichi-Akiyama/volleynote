@@ -10,7 +10,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_08_28_045054) do
+ActiveRecord::Schema[7.1].define(version: 2025_08_28_123834) do
+  create_table "match_events", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "match_id", null: false
+    t.bigint "player_id", null: false
+    t.string "event_type", null: false
+    t.integer "value", default: 1
+    t.datetime "occurred_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["match_id", "event_type"], name: "index_match_events_on_match_id_and_event_type"
+    t.index ["match_id"], name: "index_match_events_on_match_id"
+    t.index ["player_id", "event_type"], name: "index_match_events_on_player_id_and_event_type"
+    t.index ["player_id"], name: "index_match_events_on_player_id"
+  end
+
   create_table "match_players", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "match_id", null: false
     t.bigint "player_id", null: false
@@ -64,6 +78,8 @@ ActiveRecord::Schema[7.1].define(version: 2025_08_28_045054) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "match_events", "matches"
+  add_foreign_key "match_events", "players"
   add_foreign_key "match_players", "matches"
   add_foreign_key "match_players", "players"
   add_foreign_key "matches", "users"

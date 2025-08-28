@@ -79,3 +79,117 @@ end
 
 puts "#{User.count} users created."
 puts "#{Player.count} players created."
+
+# サンプル試合データの作成
+[admin_user, demo_user].each do |user|
+  # 過去の試合データを作成
+  match = user.matches.create!(
+    status: :completed,
+    started_at: 2.hours.ago,
+    ended_at: 1.hour.ago
+  )
+  
+  # 試合に出場した選手（最初の6名）
+  starting_players = user.players.limit(6)
+  bench_players = user.players.offset(6).limit(2)
+  
+  starting_players.each do |player|
+    match.match_players.create!(
+      player: player,
+      role: :starting,
+      court_status: :on_court
+    )
+  end
+  
+  bench_players.each do |player|
+    match.match_players.create!(
+      player: player,
+      role: :bench,
+      court_status: :on_bench
+    )
+  end
+  
+  # サンプル試合イベントの作成
+  match.players.each do |player|
+    # スパイク統計
+    spike_attempts = rand(10..30)
+    spike_kills = rand(0..[spike_attempts * 0.7, spike_attempts].min.to_i)
+    
+    spike_attempts.times do
+      match.match_events.create!(
+        player: player,
+        event_type: 'spike_attempt',
+        value: 1,
+        occurred_at: rand(match.started_at..match.ended_at)
+      )
+    end
+    
+    spike_kills.times do
+      match.match_events.create!(
+        player: player,
+        event_type: 'spike_kill',
+        value: 1,
+        occurred_at: rand(match.started_at..match.ended_at)
+      )
+    end
+    
+    # サーブレシーブ統計
+    if player.position != 'リベロ' || rand(2) == 0
+      recv_attempts = rand(15..40)
+      recv_successes = rand(0..[recv_attempts * 0.8, recv_attempts].min.to_i)
+      
+      recv_attempts.times do
+        match.match_events.create!(
+          player: player,
+          event_type: 'recv_attempt',
+          value: 1,
+          occurred_at: rand(match.started_at..match.ended_at)
+        )
+      end
+      
+      recv_successes.times do
+        match.match_events.create!(
+          player: player,
+          event_type: 'recv_success',
+          value: 1,
+          occurred_at: rand(match.started_at..match.ended_at)
+        )
+      end
+    end
+    
+    # サーブ統計
+    serve_attempts = rand(8..25)
+    serve_effects = rand(0..[serve_attempts * 0.4, serve_attempts].min.to_i)
+    serve_points = rand(0..[serve_effects * 0.3, serve_effects].min.to_i)
+    
+    serve_attempts.times do
+      match.match_events.create!(
+        player: player,
+        event_type: 'serve_attempt',
+        value: 1,
+        occurred_at: rand(match.started_at..match.ended_at)
+      )
+    end
+    
+    serve_effects.times do
+      match.match_events.create!(
+        player: player,
+        event_type: 'serve_effect',
+        value: 1,
+        occurred_at: rand(match.started_at..match.ended_at)
+      )
+    end
+    
+    serve_points.times do
+      match.match_events.create!(
+        player: player,
+        event_type: 'serve_point',
+        value: 1,
+        occurred_at: rand(match.started_at..match.ended_at)
+      )
+    end
+  end
+end
+
+puts "#{Match.count} matches created."
+puts "#{MatchEvent.count} match events created."

@@ -1,5 +1,8 @@
 class Player < ApplicationRecord
   belongs_to :user
+  has_many :match_players, dependent: :destroy
+  has_many :matches, through: :match_players
+  has_many :match_events, dependent: :destroy
   
   validates :name, presence: true
   validates :number, presence: true, uniqueness: { scope: :user_id }
