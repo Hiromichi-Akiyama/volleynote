@@ -423,8 +423,9 @@ body {
     font-size: 14px; 
     border-radius: 4px;
     transition: all 0.2s;
-    display: inline-block;
-    text-align: center;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     min-width: 44px;
     min-height: 44px;
     line-height: 1.2;
