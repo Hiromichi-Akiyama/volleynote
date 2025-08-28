@@ -1,25 +1,6 @@
 <!-- トップページ -->
 <div id="homepage" class="page active">
-    <!-- ヘッダー -->
-    <header class="top-header">
-        <nav class="nav">
-            <%= link_to root_path, class: "top-logo" do %>
-                <span class="top-logo-icon">🏐</span>
-                <span>VolleyNote</span>
-            <% end %>
-            <ul class="nav-links">
-                <li><%= link_to "選手一覧", players_path %></li>
-                <li><%= link_to "試合", matches_path %></li>
-                <li><%= link_to "チーム設定", teams_settings_path %></li>
-                <% if user_signed_in? %>
-                    <li><%= link_to "ログアウト", destroy_user_session_path, method: :delete %></li>
-                <% else %>
-                    <li><%= link_to "ログイン", new_user_session_path %></li>
-                    <li><%= link_to "新規登録", new_user_registration_path %></li>
-                <% end %>
-            </ul>
-        </nav>
-    </header>
+    <%= render 'shared/app_header' %>
 
     <!-- ヒーローセクション -->
     <section class="hero">

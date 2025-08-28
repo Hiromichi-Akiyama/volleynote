@@ -8,12 +8,17 @@
         </div>
     </div>
     <div class="app-nav-links">
-        <%= link_to "トップに戻る", root_path %>
+        <% unless current_page?(root_path) %>
+            <%= link_to "トップに戻る", root_path %>
+        <% end %>
         <%= link_to "選手一覧", players_path %>
         <%= link_to "試合", matches_path %>
         <%= link_to "チーム設定", teams_settings_path %>
         <% if user_signed_in? %>
             <%= link_to "ログアウト", destroy_user_session_path, method: :delete %>
+        <% else %>
+            <%= link_to "ログイン", new_user_session_path %>
+            <%= link_to "新規登録", new_user_registration_path %>
         <% end %>
     </div>
 </div>
