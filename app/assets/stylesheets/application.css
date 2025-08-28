@@ -91,7 +91,7 @@ body {
 
 .btn-secondary {
     background: transparent;
-    color: #3498db;
+    color: white;
     border-color: #3498db;
 }
 
@@ -823,12 +823,20 @@ h1 {
     background: white;
     border-radius: 8px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    text-align: center;
 }
 
 .auth-form h2 {
     text-align: center;
     margin-bottom: 30px;
     color: #2c3e50;
+}
+
+.auth-form .form-group {
+    display: inline-block;
+    width: 100%;
+    max-width: 300px; /* .form-controlと同じ幅に設定 */
+    text-align: left;
 }
 
 /* トップページではapp-bodyのpaddingがないため、app-headerのmarginを調整 */
