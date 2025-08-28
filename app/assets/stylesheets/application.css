@@ -19,15 +19,51 @@ body {
 
 /* ヒーローセクション */
 .hero {
-    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    /* 背景色をグラデーションの開始色に設定 */
+    background-color: #f5f7fa;
+    /* 複数の背景を重ねる。一番下が元のグラデーション */
+    background-image:
+        /* 水玉1 (水色) - 色を濃く */
+        radial-gradient(circle, rgba(173, 216, 230, 0.7) 0%, transparent 60%),
+        /* 水玉2 (黄色) - 色を濃く */
+        radial-gradient(circle, rgba(255, 223, 186, 0.7) 0%, transparent 60%),
+        /* 水玉3 (白) - 色を濃く */
+        radial-gradient(circle, rgba(255, 255, 255, 0.8) 0%, transparent 70%),
+        /* 水玉4 (水色) - 色を濃く */
+        radial-gradient(circle, rgba(173, 216, 230, 0.6) 0%, transparent 50%),
+        /* 水玉5 (白) - 色を濃く */
+        radial-gradient(circle, rgba(255, 255, 255, 0.7) 0%, transparent 70%),
+        /* 水玉6 (黄色) - 色を濃く */
+        radial-gradient(circle, rgba(255, 223, 186, 0.6) 0%, transparent 50%),
+        /* 元のグラデーション */
+        linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+
+    background-repeat: no-repeat;
+
+    /* 各背景レイヤーのサイズを指定 */
+    background-size:
+        250px 250px,
+        150px 150px,
+        400px 400px,
+        100px 100px,
+        300px 300px,
+        120px 120px,
+        cover; /* グラデーションは全体をカバー */
+
+    /* 各背景レイヤーの初期位置を指定 */
+    background-position:
+        10% 90%, 80% 10%, 50% 50%, 95% 80%, 20% 15%, 40% 75%,
+        center center;
     min-height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
     color: #2c3e50;
-    /* ヘッダーが固定でなくなったため、上部のpaddingを調整 */
     padding: 60px 20px 50px;
+    position: relative;
+    overflow: hidden; /* はみ出した球体を隠す */
+    animation: move-dots 40s ease-in-out infinite alternate;
 }
 
 .hero-content {
@@ -883,6 +919,15 @@ h1 {
     to {
         opacity: 1;
         transform: translateY(0);
+    }
+}
+
+@keyframes move-dots {
+    to {
+        /* アニメーション終了時の各背景レイヤーの位置 */
+        background-position:
+            -10% 20%, 110% 70%, 30% -10%, 120% 10%, -20% 90%, 70% 0%,
+            center center;
     }
 }
 
