@@ -1,0 +1,48 @@
+<div class="app-body">
+    <%= render 'shared/app_header' %>
+    
+    <div class="container">
+        <h1><%= @player.name %> の編集</h1>
+        
+        <%= form_with model: @player, local: true do |form| %>
+            <% if @player.errors.any? %>
+                <div class="alert alert-danger">
+                    <h4><%= pluralize(@player.errors.count, "error") %> prohibited this player from being saved:</h4>
+                    <ul>
+                        <% @player.errors.full_messages.each do |message| %>
+                            <li><%= message %></li>
+                        <% end %>
+                    </ul>
+                </div>
+            <% end %>
+
+            <div class="form-group">
+                <%= form.label :name, "名前" %><br>
+                <%= form.text_field :name, class: "form-control", required: true %>
+            </div>
+
+            <div class="form-group">
+                <%= form.label :number, "背番号" %><br>
+                <%= form.number_field :number, class: "form-control", required: true %>
+            </div>
+
+            <div class="form-group">
+                <%= form.label :position, "ポジション" %><br>
+                <%= form.select :position, 
+                    options_for_select([
+                        ['セッター', 'セッター'],
+                        ['ウイングスパイカー', 'ウイングスパイカー'], 
+                        ['ミドルブロッカー', 'ミドルブロッカー'],
+                        ['オポジット', 'オポジット'],
+                        ['リベロ', 'リベロ']
+                    ], @player.position), 
+                    {}, 
+                    { class: "form-control" } %>
+            </div>
+
+            <%= form.submit "更新", class: "btn" %>
+            <%= link_to "詳細", @player, class: "btn btn-secondary" %>
+            <%= link_to "一覧", players_path, class: "btn btn-secondary" %>
+        <% end %>
+    </div>
+</div>

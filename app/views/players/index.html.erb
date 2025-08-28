@@ -1,0 +1,46 @@
+<div class="app-body">
+    <%= render 'shared/app_header' %>
+    
+    <div class="container">
+        <div id="players-index">
+            <h1>選手一覧</h1>
+            <%= link_to "新しい選手を追加", new_player_path, class: "btn" %>
+            
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>背番号</th>
+                            <th>名前</th>
+                            <th>ポジション</th>
+                            <th>アクション</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% @players.each do |player| %>
+                            <tr id="player-<%= player.id %>">
+                                <td class="player-number" style="text-align: center; font-size: 18px; font-weight: bold; color: #007bff;">
+                                    <%= player.number %>
+                                </td>
+                                <td class="player-info" style="text-align: center;">
+                                    <div class="player-name" style="font-size: 16px;"><%= player.name %></div>
+                                </td>
+                                <td style="text-align: center; font-size: 14px; color: #6c757d;" class="player-position">
+                                    <%= player.position %>
+                                </td>
+                                <td style="text-align: center;">
+                                    <div class="action-buttons">
+                                        <%= link_to "詳細", player, class: "btn btn-sm btn-secondary" %>
+                                        <%= link_to "削除", player, method: :delete, 
+                                            confirm: "本当に削除しますか？", 
+                                            class: "btn btn-sm btn-danger" %>
+                                    </div>
+                                </td>
+                            </tr>
+                        <% end %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,162 @@
+<!-- トップページ -->
+<div id="homepage" class="page active">
+    <!-- ヘッダー -->
+    <header class="top-header">
+        <nav class="nav">
+            <%= link_to root_path, class: "top-logo" do %>
+                <span class="top-logo-icon">🏐</span>
+                <span>VolleyNote</span>
+            <% end %>
+            <ul class="nav-links">
+                <li><%= link_to "選手一覧", players_path %></li>
+                <li><%= link_to "試合", matches_path %></li>
+                <li><%= link_to "チーム設定", teams_settings_path %></li>
+                <% if user_signed_in? %>
+                    <li><%= link_to "ログアウト", destroy_user_session_path, method: :delete %></li>
+                <% else %>
+                    <li><%= link_to "ログイン", new_user_session_path %></li>
+                    <li><%= link_to "新規登録", new_user_registration_path %></li>
+                <% end %>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- ヒーローセクション -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>VolleyNote</h1>
+            <p class="subtitle">バレーボールチーム管理システム</p>
+            <p class="description">
+                選手情報の管理から試合中の統計記録まで、バレーボールチームの運営に必要な機能を提供します。
+                直感的な操作で効率的なチーム管理を実現し、データに基づいた戦略立案をサポートします。
+            </p>
+            <div class="cta-buttons">
+                <% if user_signed_in? %>
+                    <%= link_to "アプリを開始", players_path, class: "top-btn btn-primary" %>
+                <% else %>
+                    <%= link_to "無料で始める", new_user_registration_path, class: "top-btn btn-primary" %>
+                <% end %>
+                <a href="#features" class="top-btn btn-secondary">機能を見る</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 機能紹介 -->
+    <section class="features" id="features">
+        <div class="features-container">
+            <h2 class="section-title">主な機能</h2>
+            <p class="section-subtitle">バレーボールチームの管理・運営に必要な機能をまとめて提供します</p>
+            
+            <div class="features-grid">
+                <div class="feature-card fade-in">
+                    <span class="feature-icon">👥</span>
+                    <h3 class="feature-title">選手情報管理</h3>
+                    <p class="feature-description">
+                        選手の基本情報（名前、背番号、ポジション）と統計データを一元管理。いつでも簡単に確認・編集できます。
+                    </p>
+                </div>
+                
+                <div class="feature-card fade-in">
+                    <span class="feature-icon">📊</span>
+                    <h3 class="feature-title">試合中統計記録</h3>
+                    <p class="feature-description">
+                        試合中にスパイク、サーブ、レシーブの統計を記録。成功率を自動計算して選手のパフォーマンスを可視化します。
+                    </p>
+                </div>
+                
+                <div class="feature-card fade-in">
+                    <span class="feature-icon">🏐</span>
+                    <h3 class="feature-title">メンバー編成</h3>
+                    <p class="feature-description">
+                        スターティングメンバーとベンチメンバーを選択。試合中の選手交代も直感的に管理できます。
+                    </p>
+                </div>
+                
+                <div class="feature-card fade-in">
+                    <span class="feature-icon">📄</span>
+                    <h3 class="feature-title">試合レポート</h3>
+                    <p class="feature-description">
+                        試合終了後にチーム統計とMVPを表示。印刷対応レポートで記録の保管も簡単です。
+                    </p>
+                </div>
+                
+                <div class="feature-card fade-in">
+                    <span class="feature-icon">📱</span>
+                    <h3 class="feature-title">モバイル対応</h3>
+                    <p class="feature-description">
+                        スマートフォンやタブレットでも快適に利用可能。体育館での使用に最適化されています。
+                    </p>
+                </div>
+                
+                <div class="feature-card fade-in">
+                    <span class="feature-icon">⚡</span>
+                    <h3 class="feature-title">簡単操作</h3>
+                    <p class="feature-description">
+                        複雑な設定は不要。すぐに使い始めることができ、直感的な操作でストレスなく利用できます。
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 統計セクション -->
+    <section class="stats" id="stats">
+        <div class="features-container">
+            <h2 class="section-title">利用実績</h2>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-number">500+</div>
+                    <div class="stat-label">登録選手数</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">100+</div>
+                    <div class="stat-label">試合記録数</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">20+</div>
+                    <div class="stat-label">利用チーム数</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">99%</div>
+                    <div class="stat-label">ユーザー満足度</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA セクション -->
+    <section class="cta-section" id="contact">
+        <div class="cta-content">
+            <h2 class="cta-title">チーム管理を始めませんか？</h2>
+            <p class="cta-text">
+                VolleyNoteでバレーボールチームの情報管理を効率化し、より良いチーム運営を実現しましょう。
+            </p>
+            <% if user_signed_in? %>
+                <%= link_to "アプリを開始する", players_path, class: "top-btn btn-secondary" %>
+            <% else %>
+                <%= link_to "無料で始める", new_user_registration_path, class: "top-btn btn-secondary" %>
+            <% end %>
+        </div>
+    </section>
+
+    <!-- フッター -->
+    <footer class="top-footer">
+        <div class="footer-content">
+            <div class="footer-logo">
+                🏐 VolleyNote
+            </div>
+            <p class="footer-text">
+                バレーボールチーム管理の新しいスタンダード
+            </p>
+            <div class="footer-links">
+                <a href="#">プライバシーポリシー</a>
+                <a href="#">利用規約</a>
+                <a href="#">サポート</a>
+                <a href="#">お問い合わせ</a>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 VolleyNote. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+</div>

@@ -1,0 +1,1012 @@
+/*
+ * This is a manifest file that'll be compiled into application.css
+ */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    overflow-x: hidden;
+}
+
+/* ============ トップページスタイル ============ */
+
+/* ヘッダー */
+.top-header {
+    background: #2c3e50;
+    color: white;
+    padding: 1rem 2rem;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.top-logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 20px;
+    font-weight: 700;
+    text-decoration: none;
+    color: white;
+}
+
+.top-logo:hover {
+    color: white;
+    text-decoration: none;
+}
+
+.top-logo-icon {
+    font-size: 24px;
+}
+
+.nav-links {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+}
+
+.nav-links a {
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease;
+    padding: 8px 0;
+}
+
+.nav-links a:hover {
+    color: #3498db;
+    text-decoration: none;
+}
+
+/* ヒーローセクション */
+.hero {
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: #2c3e50;
+    padding: 100px 20px 50px;
+}
+
+.hero-content {
+    max-width: 700px;
+}
+
+.hero h1 {
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: #2c3e50;
+}
+
+.hero .subtitle {
+    font-size: 1.3rem;
+    margin-bottom: 1.5rem;
+    color: #7f8c8d;
+}
+
+.hero .description {
+    font-size: 1.1rem;
+    margin-bottom: 2.5rem;
+    color: #34495e;
+    line-height: 1.6;
+}
+
+.cta-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.top-btn {
+    padding: 12px 24px;
+    font-size: 16px;
+    font-weight: 600;
+    border: 2px solid transparent;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.top-btn:hover {
+    text-decoration: none;
+}
+
+.btn-primary {
+    background: #3498db;
+    color: white;
+    border-color: #3498db;
+}
+
+.btn-primary:hover {
+    background: #2980b9;
+    border-color: #2980b9;
+    color: white;
+}
+
+.btn-secondary {
+    background: transparent;
+    color: #3498db;
+    border-color: #3498db;
+}
+
+.btn-secondary:hover {
+    background: #3498db;
+    color: white;
+}
+
+/* 機能紹介セクション */
+.features {
+    padding: 80px 2rem;
+    background: #ffffff;
+}
+
+.features-container {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.section-title {
+    text-align: center;
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: #2c3e50;
+    margin-bottom: 1rem;
+}
+
+.section-subtitle {
+    text-align: center;
+    font-size: 1.1rem;
+    color: #7f8c8d;
+    margin-bottom: 3rem;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-top: 3rem;
+}
+
+.feature-card {
+    background: #f8f9fa;
+    padding: 2rem;
+    border-radius: 8px;
+    text-align: center;
+    border: 1px solid #e9ecef;
+    transition: all 0.3s ease;
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    border-color: #3498db;
+}
+
+.feature-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    display: block;
+}
+
+.feature-title {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 1rem;
+}
+
+.feature-description {
+    color: #7f8c8d;
+    line-height: 1.6;
+}
+
+/* 統計セクション */
+.stats {
+    background: #34495e;
+    padding: 80px 2rem;
+    color: white;
+    text-align: center;
+}
+
+.stats .section-title {
+    color: white;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 2rem;
+    max-width: 800px;
+    margin: 3rem auto 0;
+}
+
+.stat-item {
+    padding: 2rem 1rem;
+    background: rgba(255,255,255,0.1);
+    border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.2);
+}
+
+.stat-number {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: white;
+}
+
+.stat-label {
+    font-size: 0.9rem;
+    opacity: 0.9;
+}
+
+/* CTAセクション */
+.cta-section {
+    background: #ecf0f1;
+    padding: 80px 2rem;
+    text-align: center;
+}
+
+.cta-content {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.cta-title {
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: #2c3e50;
+    margin-bottom: 1rem;
+}
+
+.cta-text {
+    font-size: 1.1rem;
+    color: #7f8c8d;
+    margin-bottom: 2rem;
+}
+
+/* フッター */
+.top-footer {
+    background: #2c3e50;
+    color: white;
+    padding: 3rem 2rem 2rem;
+    text-align: center;
+}
+
+.footer-content {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.footer-logo {
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.footer-text {
+    color: #bdc3c7;
+    margin-bottom: 2rem;
+}
+
+.footer-links {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+    margin-bottom: 2rem;
+}
+
+.footer-links a {
+    color: #bdc3c7;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.footer-links a:hover {
+    color: #3498db;
+    text-decoration: none;
+}
+
+.footer-bottom {
+    border-top: 1px solid #34495e;
+    padding-top: 2rem;
+    color: #95a5a6;
+}
+
+/* ============ アプリケーション管理画面スタイル ============ */
+
+.app-body { 
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
+    margin: 0; 
+    padding: 10px; 
+    background-color: #f8f9fa;
+    font-size: 14px;
+}
+
+.app-header { 
+    background: linear-gradient(135deg, #1e3c72, #2a5298, #007bff); 
+    padding: 20px; 
+    margin: -10px -10px 15px -10px; 
+    border-bottom: 3px solid #004085; 
+    box-shadow: 
+        0 8px 32px rgba(0,0,0,0.2),
+        inset 0 1px 0 rgba(255,255,255,0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+    position: relative;
+    overflow: hidden;
+}
+
+.app-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 20"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="rgba(255,255,255,0.02)"/><circle cx="75" cy="75" r="1" fill="rgba(255,255,255,0.02)"/><circle cx="50" cy="50" r="0.5" fill="rgba(255,255,255,0.03)"/></pattern></defs><rect width="100%" height="100%" fill="url(%23grain)"/></svg>');
+    opacity: 0.1;
+    pointer-events: none;
+}
+
+.logo-section {
+    flex: 1;
+    position: relative;
+    z-index: 2;
+}
+
+.app-nav-links {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    position: relative;
+    z-index: 2;
+}
+
+.app-nav-links a { 
+    text-decoration: none; 
+    color: white; 
+    font-weight: 600;
+    padding: 10px 18px;
+    border-radius: 25px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    backdrop-filter: blur(10px);
+    position: relative;
+    overflow: hidden;
+}
+
+.app-nav-links a::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s ease;
+}
+
+.app-nav-links a:hover::before {
+    left: 100%;
+}
+
+.app-nav-links a:hover { 
+    background: rgba(255,255,255,0.2);
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 
+        0 8px 25px rgba(0,0,0,0.3),
+        0 0 0 1px rgba(255,255,255,0.3);
+    border-color: rgba(255,255,255,0.4);
+    color: white;
+    text-decoration: none;
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.logo-main {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    position: relative;
+}
+
+.logo-icon {
+    font-size: 26px;
+    filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.3));
+    animation: pulse 3s ease-in-out infinite;
+}
+
+.logo-text {
+    font-size: 22px;
+    font-weight: 900;
+    font-family: 'Arial Black', Arial, sans-serif;
+    letter-spacing: 1px;
+    position: relative;
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.4);
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.03);
+    }
+}
+
+.btn { 
+    padding: 8px 16px; 
+    margin: 2px; 
+    border: 1px solid #007bff; 
+    background: #007bff; 
+    color: white;
+    cursor: pointer; 
+    font-size: 14px; 
+    border-radius: 4px;
+    transition: all 0.2s;
+    display: inline-block;
+    text-align: center;
+    min-width: 44px;
+    min-height: 44px;
+    line-height: 1.2;
+    text-decoration: none;
+}
+
+.btn:hover { 
+    background: #0056b3; 
+    border-color: #0056b3;
+    color: white;
+    text-decoration: none;
+}
+
+.btn-sm { 
+    padding: 6px 12px; 
+    font-size: 12px; 
+    min-width: 36px;
+    min-height: 36px;
+}
+
+.btn-secondary {
+    background: #6c757d;
+    border-color: #6c757d;
+}
+
+.btn-secondary:hover {
+    background: #545b62;
+    border-color: #545b62;
+    color: white;
+}
+
+.btn-danger {
+    background: #dc3545;
+    border-color: #dc3545;
+}
+
+.btn-danger:hover {
+    background: #c82333;
+    border-color: #c82333;
+    color: white;
+}
+
+.table-container {
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+    margin: 20px 0;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    max-height: 70vh;
+    position: relative;
+}
+
+table { 
+    border-collapse: collapse; 
+    width: 100%; 
+    background: white;
+    min-width: 800px;
+    margin: 0;
+}
+
+th, td { 
+    border: 1px solid #dee2e6; 
+    padding: 8px; 
+    text-align: left; 
+    vertical-align: top;
+}
+
+th { 
+    background-color: #343a40; 
+    color: white;
+    font-weight: 600;
+    font-size: 12px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+tr:nth-child(even) {
+    background-color: #f8f9fa;
+}
+
+.form-group { 
+    margin-bottom: 15px; 
+}
+
+.form-control { 
+    padding: 12px; 
+    border: 1px solid #ddd; 
+    border-radius: 4px; 
+    width: 100%;
+    max-width: 300px;
+    font-size: 16px;
+}
+
+.stat-block { 
+    border: 1px solid #e9ecef; 
+    padding: 8px; 
+    border-radius: 6px; 
+    background: #f8f9fa;
+    margin-bottom: 8px;
+    min-width: 140px;
+}
+
+.stat-row { 
+    margin: 4px 0; 
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 11px;
+    flex-wrap: wrap;
+    gap: 4px;
+}
+
+.stat-label {
+    flex: 1;
+    min-width: 60px;
+}
+
+.stat-value {
+    font-weight: bold;
+    color: #495057;
+    margin: 0 4px;
+}
+
+.rate-display {
+    color: #007bff;
+    font-weight: bold;
+    font-size: 11px;
+    text-align: center;
+    margin: 4px 0;
+}
+
+.btn-group {
+    display: flex;
+    gap: 2px;
+    flex-shrink: 0;
+}
+
+.action-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+h1 {
+    color: #343a40;
+    margin-bottom: 20px;
+    font-size: 24px;
+}
+
+.notice {
+    background: #d4edda;
+    color: #155724;
+    padding: 12px 15px;
+    border: 1px solid #c3e6cb;
+    border-radius: 4px;
+    margin-bottom: 15px;
+}
+
+.alert {
+    padding: 12px 15px;
+    border: 1px solid;
+    border-radius: 4px;
+    margin-bottom: 15px;
+}
+
+.alert-danger {
+    background: #f8d7da;
+    color: #721c24;
+    border-color: #f5c6cb;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    background: white;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.player-info {
+    font-size: 12px;
+    line-height: 1.3;
+}
+
+.player-name {
+    font-weight: bold;
+    color: #343a40;
+}
+
+.player-number {
+    font-size: 16px;
+    font-weight: bold;
+    color: #007bff;
+    text-align: center;
+}
+
+/* 試合モード専用スタイル */
+.match-header {
+    background: #28a745;
+    color: white;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.match-status {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.player-selection {
+    background: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 20px;
+}
+
+.player-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.player-card {
+    background: white;
+    border: 2px solid #dee2e6;
+    border-radius: 6px;
+    padding: 10px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+}
+
+.player-card:hover {
+    border-color: #007bff;
+    background-color: #f8f9fa;
+}
+
+.player-card.selected {
+    border-color: #28a745;
+    background-color: #d4edda;
+}
+
+.player-card.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background-color: #f8f9fa;
+}
+
+.player-card.disabled:hover {
+    border-color: #dee2e6;
+    background-color: #f8f9fa;
+}
+
+.court-players {
+    background: #e3f2fd;
+    border: 2px solid #2196f3;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 20px;
+}
+
+.court-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.court-player {
+    background: white;
+    border: 1px solid #2196f3;
+    border-radius: 6px;
+    padding: 8px;
+    text-align: center;
+    position: relative;
+}
+
+.substitute-btn {
+    background: #ffc107;
+    border: 1px solid #ffc107;
+    color: #212529;
+    font-size: 10px;
+    padding: 4px 8px;
+    border-radius: 3px;
+    margin-top: 5px;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.substitute-btn:hover {
+    background: #e0a800;
+    text-decoration: none;
+    color: #212529;
+}
+
+.remove-btn {
+    background: #dc3545;
+    border: 1px solid #dc3545;
+    color: white;
+    font-size: 10px;
+    padding: 4px 8px;
+    border-radius: 3px;
+    margin-top: 5px;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.remove-btn:hover {
+    background: #c82333;
+    color: white;
+    text-decoration: none;
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    z-index: 1000;
+}
+
+.modal-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    max-width: 500px;
+    width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.bench-players {
+    background: #fff3cd;
+    border: 1px solid #ffeaa7;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 20px;
+}
+
+.match-table {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.match-table .stat-block {
+    background: #fff;
+    border-color: #28a745;
+}
+
+.match-table .btn {
+    background: #28a745;
+    border-color: #28a745;
+}
+
+.match-table .btn:hover {
+    background: #1e7e34;
+    border-color: #1e7e34;
+}
+
+.match-table .btn-secondary {
+    background: #6c757d;
+    border-color: #6c757d;
+}
+
+/* 表示/非表示の制御 */
+.page {
+    display: none;
+}
+
+.page.active {
+    display: block;
+}
+
+/* 認証フォームスタイル */
+.auth-form {
+    max-width: 500px;
+    margin: 50px auto;
+    padding: 20px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.auth-form h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #2c3e50;
+}
+
+/* アニメーション効果 */
+.fade-in {
+    opacity: 0;
+    transform: translateY(30px);
+    animation: fadeInUp 0.8s ease-out forwards;
+}
+
+.fade-in:nth-child(1) { animation-delay: 0.1s; }
+.fade-in:nth-child(2) { animation-delay: 0.2s; }
+.fade-in:nth-child(3) { animation-delay: 0.3s; }
+.fade-in:nth-child(4) { animation-delay: 0.4s; }
+
+.floating {
+    animation: floating 3s ease-in-out infinite;
+}
+
+@keyframes floating {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+}
+
+.gradient-text {
+    background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: gradientShift 3s ease-in-out infinite;
+}
+
+@keyframes gradientShift {
+    0%, 100% { filter: hue-rotate(0deg); }
+    50% { filter: hue-rotate(45deg); }
+}
+
+@keyframes fadeInUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* レスポンシブ */
+@media (max-width: 768px) {
+    .hero h1 {
+        font-size: 2.5rem;
+    }
+
+    .hero .subtitle {
+        font-size: 1.2rem;
+    }
+
+    .nav {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .nav-links {
+        gap: 1rem;
+    }
+
+    .cta-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .top-btn {
+        width: 100%;
+        max-width: 300px;
+    }
+
+    .features-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+
+    .app-body {
+        padding: 5px;
+        font-size: 13px;
+    }
+    
+    .app-header {
+        padding: 15px;
+        margin: -5px -5px 10px -5px;
+        flex-direction: column;
+        text-align: center;
+        gap: 15px;
+    }
+    
+    .logo-container {
+        align-items: center;
+    }
+    
+    .logo-icon {
+        font-size: 22px;
+    }
+    
+    .logo-text {
+        font-size: 18px;
+        letter-spacing: 0.8px;
+    }
+    
+    .app-nav-links {
+        justify-content: center;
+        gap: 8px;
+    }
+    
+    .app-nav-links a {
+        padding: 8px 14px;
+        font-size: 13px;
+    }
+    
+    .container {
+        padding: 10px;
+    }
+    
+    h1 {
+        font-size: 20px;
+        margin-bottom: 15px;
+    }
+}

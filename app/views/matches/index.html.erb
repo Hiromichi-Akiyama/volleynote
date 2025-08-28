@@ -1,0 +1,95 @@
+<div class="app-body">
+    <%= render 'shared/app_header' %>
+    
+    <div class="container" data-controller="volleynote">
+        <div class="match-header">
+            <div class="match-status">🏐 試合モード</div>
+            <div>
+                <button class="btn" data-action="click->volleynote#endMatch">試合終了</button>
+                <%= link_to "戻る", players_path, class: "btn btn-secondary" %>
+            </div>
+        </div>
+        
+        <!-- 選手選択段階 -->
+        <div id="player-selection-phase">
+            <div class="player-selection">
+                <h3>🏐 スターティングメンバーを選択してください（最大6名）</h3>
+                <div>選択済み: <span id="starting-count">0</span>/6名</div>
+                <div class="player-grid" id="starting-selection-grid">
+                    <% @players.each do |player| %>
+                        <div class="player-card" data-player-id="<%= player.id %>" data-action="click->volleynote#toggleStartingPlayer">
+                            <div style="font-weight: bold; color: #007bff; font-size: 18px;">#<%= player.number %></div>
+                            <div style="font-weight: bold; margin: 5px 0;"><%= player.name %></div>
+                            <div style="font-size: 12px; color: #6c757d;"><%= player.position %></div>
+                        </div>
+                    <% end %>
+                </div>
+            </div>
+            
+            <div class="player-selection" style="background: #fff3cd; border-color: #ffeaa7;">
+                <h3>🪑 ベンチメンバーを選択してください（任意）</h3>
+                <div>選択済み: <span id="bench-selection-count">0</span>名</div>
+                <div class="player-grid" id="bench-selection-grid">
+                    <% @players.each do |player| %>
+                        <div class="player-card" data-player-id="<%= player.id %>" data-action="click->volleynote#toggleBenchPlayer">
+                            <div style="font-weight: bold; color: #6c757d; font-size: 18px;">#<%= player.number %></div>
+                            <div style="font-weight: bold; margin: 5px 0;"><%= player.name %></div>
+                            <div style="font-size: 12px; color: #6c757d;"><%= player.position %></div>
+                        </div>
+                    <% end %>
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 20px;">
+                <button class="btn" id="start-match-btn" data-action="click->volleynote#startMatch" disabled>試合開始</button>
+            </div>
+        </div>
+        
+        <!-- 試合進行段階 -->
+        <div id="match-progress-phase" style="display: none;">
+            <!-- コート上の選手 -->
+            <div class="court-players">
+                <h3>🏐 コート上の選手</h3>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                    <span>現在: <span id="court-count">0</span>/6名</span>
+                    <button class="btn btn-sm" data-action="click->volleynote#showPlayerAddModal">選手追加</button>
+                </div>
+                <div class="court-grid" id="court-players-grid">
+                    <!-- コート上選手がJSで生成される -->
+                </div>
+            </div>
+            
+            <!-- ベンチの選手 -->
+            <div class="bench-players">
+                <h3>🪑 ベンチ</h3>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                    <span>ベンチ: <span id="bench-count">0</span>名</span>
+                    <button class="btn btn-sm btn-secondary" data-action="click->volleynote#showBenchAddModal">ベンチに追加</button>
+                </div>
+                <div class="court-grid" id="bench-players-grid">
+                    <!-- ベンチ選手がJSで生成される -->
+                </div>
+            </div>
+            
+            <!-- 統計入力テーブル -->
+            <div class="match-table">
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>背番号</th>
+                                <th>名前・ポジション</th>
+                                <th>スパイク</th>
+                                <th>サーブレシーブ</th>
+                                <th>サーブ</th>
+                            </tr>
+                        </thead>
+                        <tbody id="match-players-tbody">
+                            <!-- 出場選手の行が動的生成される -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

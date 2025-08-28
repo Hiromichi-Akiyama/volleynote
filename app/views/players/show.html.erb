@@ -1,0 +1,169 @@
+<div class="app-body">
+    <%= render 'shared/app_header' %>
+    
+    <div class="container" data-controller="volleynote">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h1><%= @player.name %> の詳細</h1>
+            <%= link_to "選手一覧に戻る", players_path, class: "btn btn-secondary" %>
+        </div>
+        
+        <!-- 選手基本情報 -->
+        <div style="background: #f8f9fa; border-radius: 8px; padding: 20px; margin-bottom: 20px;">
+            <h3>基本情報</h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 15px;">
+                <div><strong>背番号:</strong> <%= @player.number %></div>
+                <div><strong>名前:</strong> <%= @player.name %></div>
+                <div><strong>ポジション:</strong> <%= @player.position %></div>
+            </div>
+        </div>
+        
+        <!-- 統計情報 -->
+        <div style="background: white; border-radius: 8px; padding: 20px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+            <h3>統計データ</h3>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>項目</th>
+                            <th>スパイク</th>
+                            <th>サーブレシーブ</th>
+                            <th>サーブ</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="font-weight: bold;">試行回数</td>
+                            <td style="text-align: center; font-size: 18px; font-weight: bold; color: #dc3545;"><%= @player.spike_attempts %></td>
+                            <td style="text-align: center; font-size: 18px; font-weight: bold; color: #007bff;"><%= @player.recv_attempts %></td>
+                            <td style="text-align: center; font-size: 18px; font-weight: bold; color: #28a745;"><%= @player.serve_attempts %></td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight: bold;">成功回数</td>
+                            <td style="text-align: center; font-size: 18px; font-weight: bold; color: #dc3545;"><%= @player.spike_kills %></td>
+                            <td style="text-align: center; font-size: 18px; font-weight: bold; color: #007bff;"><%= @player.recv_successes %></td>
+                            <td style="text-align: center; font-size: 18px; font-weight: bold; color: #28a745;"><%= @player.serve_effects %></td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight: bold;">成功率</td>
+                            <td style="text-align: center; font-size: 16px; font-weight: bold; color: #dc3545;" data-rate="spike_rate"><%= @player.spike_rate %>%</td>
+                            <td style="text-align: center; font-size: 16px; font-weight: bold; color: #007bff;" data-rate="recv_rate"><%= @player.recv_rate %>%</td>
+                            <td style="text-align: center; font-size: 16px; font-weight: bold; color: #28a745;" data-rate="serve_effect_rate"><%= @player.serve_effect_rate %>%</td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight: bold;">サーブ決定</td>
+                            <td style="text-align: center; color: #6c757d;">-</td>
+                            <td style="text-align: center; color: #6c757d;">-</td>
+                            <td>
+                                <div style="text-align: center;">
+                                    <div style="font-size: 18px; font-weight: bold; color: #28a745;"><%= @player.serve_points %></div>
+                                    <div style="font-size: 14px; color: #28a745;" data-rate="serve_point_rate">(決定率: <%= @player.serve_point_rate %>%)</div>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <!-- 統計編集 -->
+        <div style="background: #e3f2fd; border-radius: 8px; padding: 20px; margin-bottom: 20px;">
+            <h3>統計編集</h3>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>項目</th>
+                            <th>スパイク</th>
+                            <th>サーブレシーブ</th>
+                            <th>サーブ</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% [
+                            ['スパイク試行', 'spike_attempts', 'spike'],
+                            ['スパイク決定', 'spike_kills', 'spike'],
+                            ['SR試行', 'recv_attempts', 'recv'],
+                            ['SR成功', 'recv_successes', 'recv'],
+                            ['サーブ試行', 'serve_attempts', 'serve'],
+                            ['サーブ効果', 'serve_effects', 'serve'],
+                            ['サーブ決定', 'serve_points', 'serve']
+                        ].each do |label, key, col| %>
+                            <tr>
+                                <td style="font-weight: bold;"><%= label %></td>
+                                <td <%= col == 'spike' ? '' : 'style="text-align: center; color: #6c757d;"' %>>
+                                    <% if col == 'spike' %>
+                                        <div class="stat-row">
+                                            <span><%= label %>: <span class="stat-value" data-stat="<%= key %>"><%= @player.send(key) %></span></span>
+                                            <div class="btn-group">
+                                                <button class="btn btn-sm btn-secondary" 
+                                                        data-action="click->volleynote#bumpStat"
+                                                        data-player-id="<%= @player.id %>"
+                                                        data-stat-key="<%= key %>"
+                                                        data-delta="-1">−</button>
+                                                <button class="btn btn-sm" 
+                                                        data-action="click->volleynote#bumpStat"
+                                                        data-player-id="<%= @player.id %>"
+                                                        data-stat-key="<%= key %>"
+                                                        data-delta="1">+</button>
+                                            </div>
+                                        </div>
+                                    <% else %>
+                                        -
+                                    <% end %>
+                                </td>
+                                <td <%= col == 'recv' ? '' : 'style="text-align: center; color: #6c757d;"' %>>
+                                    <% if col == 'recv' %>
+                                        <div class="stat-row">
+                                            <span><%= label %>: <span class="stat-value" data-stat="<%= key %>"><%= @player.send(key) %></span></span>
+                                            <div class="btn-group">
+                                                <button class="btn btn-sm btn-secondary" 
+                                                        data-action="click->volleynote#bumpStat"
+                                                        data-player-id="<%= @player.id %>"
+                                                        data-stat-key="<%= key %>"
+                                                        data-delta="-1">−</button>
+                                                <button class="btn btn-sm" 
+                                                        data-action="click->volleynote#bumpStat"
+                                                        data-player-id="<%= @player.id %>"
+                                                        data-stat-key="<%= key %>"
+                                                        data-delta="1">+</button>
+                                            </div>
+                                        </div>
+                                    <% else %>
+                                        -
+                                    <% end %>
+                                </td>
+                                <td <%= col == 'serve' ? '' : 'style="text-align: center; color: #6c757d;"' %>>
+                                    <% if col == 'serve' %>
+                                        <div class="stat-row">
+                                            <span><%= label %>: <span class="stat-value" data-stat="<%= key %>"><%= @player.send(key) %></span></span>
+                                            <div class="btn-group">
+                                                <button class="btn btn-sm btn-secondary" 
+                                                        data-action="click->volleynote#bumpStat"
+                                                        data-player-id="<%= @player.id %>"
+                                                        data-stat-key="<%= key %>"
+                                                        data-delta="-1">−</button>
+                                                <button class="btn btn-sm" 
+                                                        data-action="click->volleynote#bumpStat"
+                                                        data-player-id="<%= @player.id %>"
+                                                        data-stat-key="<%= key %>"
+                                                        data-delta="1">+</button>
+                                            </div>
+                                        </div>
+                                    <% else %>
+                                        -
+                                    <% end %>
+                                </td>
+                            </tr>
+                        <% end %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <div style="text-align: center;">
+            <%= link_to "基本情報を編集", edit_player_path(@player), class: "btn btn-secondary" %>
+            <%= link_to "選手を削除", @player, method: :delete, 
+                confirm: "本当に削除しますか？", class: "btn btn-danger" %>
+        </div>
+    </div>
+</div>

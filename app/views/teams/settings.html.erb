@@ -1,0 +1,38 @@
+<div class="app-body">
+    <%= render 'shared/app_header' %>
+    
+    <div class="container">
+        <h1>チーム設定</h1>
+        
+        <%= form_with model: @user, url: teams_settings_path, method: :patch, local: true do |form| %>
+            <% if @user.errors.any? %>
+                <div class="alert alert-danger">
+                    <h4><%= pluralize(@user.errors.count, "error") %> prohibited this team from being saved:</h4>
+                    <ul>
+                        <% @user.errors.full_messages.each do |message| %>
+                            <li><%= message %></li>
+                        <% end %>
+                    </ul>
+                </div>
+            <% end %>
+
+            <div class="form-group">
+                <%= form.label :team_name, "チーム名" %><br>
+                <%= form.text_field :team_name, class: "form-control", required: true %>
+            </div>
+
+            <div class="form-group">
+                <%= form.label :coach_name, "監督名" %><br>
+                <%= form.text_field :coach_name, class: "form-control" %>
+            </div>
+
+            <div class="form-group">
+                <label>登録メールアドレス</label><br>
+                <span style="padding: 12px; border: 1px solid #ddd; border-radius: 4px; background: #f8f9fa; display: inline-block; width: 100%; max-width: 300px;"><%= @user.email %></span>
+            </div>
+
+            <%= form.submit "更新", class: "btn" %>
+            <%= link_to "選手一覧", players_path, class: "btn btn-secondary" %>
+        <% end %>
+    </div>
+</div>

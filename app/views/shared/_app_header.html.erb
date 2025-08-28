@@ -1,0 +1,19 @@
+<div class="app-header">
+    <div class="logo-section">
+        <div class="logo-container">
+            <%= link_to root_path, class: "logo-main", style: "text-decoration: none; color: white;" do %>
+                <span class="logo-icon">🏐</span>
+                <span class="logo-text">VolleyNote</span>
+            <% end %>
+        </div>
+    </div>
+    <div class="app-nav-links">
+        <%= link_to "トップに戻る", root_path %>
+        <%= link_to "選手一覧", players_path %>
+        <%= link_to "試合", matches_path %>
+        <%= link_to "チーム設定", teams_settings_path %>
+        <% if user_signed_in? %>
+            <%= link_to "ログアウト", destroy_user_session_path, method: :delete %>
+        <% end %>
+    </div>
+</div>
