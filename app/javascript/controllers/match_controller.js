@@ -35,7 +35,6 @@ export default class extends Controller {
         if (index > -1) {
             this.matchState.startingPlayers.splice(index, 1)
             playerCard.classList.remove('selected')
-            playerCard.style.backgroundColor = ''
         } else {
             if (this.matchState.startingPlayers.length >= 6) {
                 this.showNotice('スターティングメンバーは最大6名まで選択できます。')
@@ -43,7 +42,6 @@ export default class extends Controller {
             }
             this.matchState.startingPlayers.push(playerId)
             playerCard.classList.add('selected')
-            playerCard.style.backgroundColor = '#d4edda'
         }
         
         this.updateSelectionCounts()
@@ -63,11 +61,9 @@ export default class extends Controller {
         if (index > -1) {
             this.matchState.benchSelection.splice(index, 1)
             playerCard.classList.remove('selected')
-            playerCard.style.backgroundColor = ''
         } else {
             this.matchState.benchSelection.push(playerId)
             playerCard.classList.add('selected')
-            playerCard.style.backgroundColor = '#fff3cd'
         }
         
         this.updateSelectionCounts()

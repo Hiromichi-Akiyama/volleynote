@@ -8,8 +8,8 @@
             <div class="match-status">🏐 試合モード</div>
             <div>
                 <% if @match.active? %>
-                    <%= link_to "試合終了", end_match_match_path(@match),
-                        data: { turbo_confirm: "本当に試合を終了しますか？" }, class: "btn" %>
+                    <%= link_to "試合終了", end_match_match_path(@match), method: :patch, 
+                        confirm: "本当に試合を終了しますか？", class: "btn" %>
                 <% end %>
                 <%= link_to "戻る", players_path, class: "btn btn-secondary" %>
             </div>
