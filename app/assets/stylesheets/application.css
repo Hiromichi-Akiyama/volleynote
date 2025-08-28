@@ -676,10 +676,8 @@ h1 {
 }
 
 .player-number {
-    font-size: 16px;
     font-weight: bold;
     color: #007bff;
-    text-align: center;
 }
 
 /* 試合モード専用スタイル */
@@ -929,6 +927,26 @@ h1 {
         opacity: 1;
         transform: translateY(0);
     }
+}
+
+/* Player List Table Styles */
+.players-table th,
+.players-table td {
+    text-align: center;
+    vertical-align: middle;
+}
+
+.players-table .player-number {
+    font-size: 18px;
+}
+
+.players-table .player-info .player-name {
+    font-size: 16px;
+}
+
+.players-table .player-position {
+    font-size: 14px;
+    color: #6c757d;
 }
 
 /* レスポンシブ */

@@ -7,7 +7,7 @@
             <%= link_to "新しい選手を追加", new_player_path, class: "btn" %>
             
             <div class="table-container">
-                <table>
+                <table class="players-table">
                     <thead>
                         <tr>
                             <th>背番号</th>
@@ -19,16 +19,16 @@
                     <tbody>
                         <% @players.each do |player| %>
                             <tr id="player-<%= player.id %>">
-                                <td class="player-number" style="text-align: center; font-size: 18px; font-weight: bold; color: #007bff;">
+                                <td class="player-number">
                                     <%= player.number %>
                                 </td>
-                                <td class="player-info" style="text-align: center;">
-                                    <div class="player-name" style="font-size: 16px;"><%= player.name %></div>
+                                <td class="player-info">
+                                    <div class="player-name"><%= player.name %></div>
                                 </td>
-                                <td style="text-align: center; font-size: 14px; color: #6c757d;" class="player-position">
+                                <td class="player-position">
                                     <%= player.position %>
                                 </td>
-                                <td style="text-align: center;">
+                                <td>
                                     <div class="action-buttons">
                                         <%= link_to "詳細", player, class: "btn btn-sm btn-secondary" %>
                                         <%= link_to "削除", player, method: :delete, 
