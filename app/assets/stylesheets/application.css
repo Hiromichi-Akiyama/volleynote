@@ -425,28 +425,23 @@ body {
 }
 
 .logo-icon {
-    font-size: 26px;
-    filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.3));
-    animation: pulse 3s ease-in-out infinite;
+    font-size: 28px;
+    filter: drop-shadow(0 2px 3px rgba(0,0,0,0.2));
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .logo-text {
-    font-size: 22px;
-    font-weight: 900;
-    font-family: 'Arial Black', Arial, sans-serif;
-    letter-spacing: 1px;
+    font-size: 26px;
+    font-weight: 700;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    letter-spacing: 0.5px;
     position: relative;
     color: white;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.4);
+    text-shadow: 0 3px 5px rgba(0, 0, 0, 0.4);
 }
 
-@keyframes pulse {
-    0%, 100% {
-        transform: scale(1);
-    }
-    50% {
-        transform: scale(1.03);
-    }
+.logo-main:hover .logo-icon {
+    transform: rotate(-10deg) scale(1.1);
 }
 
 .btn { 
